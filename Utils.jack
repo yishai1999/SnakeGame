@@ -1,0 +1,28 @@
+class Utils {
+	static int seed;
+	
+	function void setSeed(int seed1) {
+		let seed = seed1;
+		return;
+	}
+
+	function int mod(int a, int b) {
+		var int tmp;
+		let tmp = Math.divide(a,b);
+		let tmp = Math.multiply(tmp,b);
+		let a = a - tmp;
+		if (a < 0) {
+			let a = b + a;
+		}
+		return a;
+	}
+
+	function int rand() {
+		let seed = Utils.mod(7919 + (19*seed),31053);
+		return seed;
+	}
+
+	function int rand1(int min, int max) {
+		return Utils.mod(Utils.rand(), max - min + 1) + min;
+	}
+}

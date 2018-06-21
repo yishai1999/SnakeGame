@@ -1,0 +1,152 @@
+/**
+ * The Snkae class implements a graphic snake made out of multiple squares. A graphic snake 
+ * has the headIndex of the snake and the rest of its body. It also has methods 
+ * for drawing, erasing, moving on the screen, and changing its size.
+ */
+
+class Snake {
+
+    field Array snakeArr;
+
+    field int size;
+    field int direction;
+    field int headIndex;
+    /** Constructs a new sanke with a given size. */
+    constructor Snake new(int Asize) {
+        var int count, x, y;
+        var Square head;
+
+        let size = Asize;
+        let snakeArr = Array.new(size);
+        let direction = 4;
+        let headIndex = size - 1;
+
+        let count = 0;
+        let x = 0;
+        let y = 235;
+        while (count < size) {
+            let head = Square.new(x,y,20);
+            let snakeArr[count] = head;
+            do head.draw();
+            let x = x + 22;
+            let count = count + 1;
+        }
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        var int count;
+        var Square head;
+        let count = 0;
+        while (count < size) {
+            let head = snakeArr[count];
+            do head.dispose();
+        }
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method int getSize() {
+        return size;
+    }
+    
+    method void moveUp() {
+        var int x, y;
+        var Square head;
+        if (direction = 2) {
+            let headIndex = size - headIndex - 1;
+        }
+        let head = snakeArr[headIndex];
+        let x = head.getX();
+        let y = head.getY();
+        do head.move(x,y - 22);
+        do updateTail(x,y);
+        let direction = 1;
+        return;
+    }
+    
+    method void moveDown() {
+        var int x, y;
+        var Square head;
+        if (direction = 1) {
+            let headIndex = size - headIndex - 1;
+        }
+        let head = snakeArr[headIndex];
+        let x = head.getX();
+        let y = head.getY();
+        do head.move(x,y + 22);
+        do updateTail(x,y);
+        let direction = 2;
+        return;
+    }
+    
+    method void moveLeft() {
+        var int x, y;
+        var Square head;
+        if (direction = 4) {
+            let headIndex = size - headIndex - 1;
+        }
+        let head = snakeArr[headIndex];
+        let x = head.getX();
+        let y = head.getY();
+        do head.move(x - 22,y);
+        do updateTail(x,y);
+        let direction = 3;
+        return;
+    }
+
+    method void moveRight() {
+        var int x, y;
+        var Square head;
+        if (direction = 3) {
+            let headIndex = size - headIndex - 1;
+        }
+        let head = snakeArr[headIndex];
+        let x = head.getX();
+        let y = head.getY();
+        do head.move(x + 22,y);
+        do updateTail(x,y);
+        let direction = 4;
+        return;
+    }
+
+    method void moveRandom() {
+        /*  do erase();
+        *   let x = Utils.rand1(0,511-size);
+        *   let y = Utils.rand1(0,255-size);
+        *   do draw();*/
+        return;
+    }
+
+    method boolean isTouching(Square s1) {
+        var Square head;
+        var boolean ret;
+        let head = snakeArr[headIndex];
+        
+        return head.isTouching(s1);
+    }
+
+    method void updateTail(int x, int y) {
+        var int i, x1, y1;
+        var Square cur;
+        let i = 1;
+        while (i < size) {
+            if (headIndex = 0) {
+                let cur = snakeArr[i];
+            }
+            else {
+                let cur = snakeArr[size - 1 - i];
+            }
+            let x1 = cur.getX();
+            let y1 = cur.getY();
+            do cur.move(x,y);
+            let x = x1;
+            let y = y1;
+            let i = i + 1;
+        }
+        return;
+    }
+
+}
